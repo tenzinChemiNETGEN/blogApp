@@ -24,6 +24,7 @@ Route::get('/', function () {
 /**
  * Auth route
  */
+
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post'); 
 Route::get('registration', [AuthController::class, 'registration'])->name('register');
@@ -43,10 +44,12 @@ Route::get('/blog/{slug}',[BlogPostController::class,'show']);
  *  user blog route
  * 
  */
-Route::get('/blog/create/post', [\App\Http\Controllers\BlogPostController::class, 'create']); //shows create post form
-Route::post('/blog/create/post', [\App\Http\Controllers\BlogPostController::class, 'store'])->name('store'); //saves the created post to the databse
-Route::get('edit/{slug}', [\App\Http\Controllers\BlogPostController::class, 'edit'])->name('edit'); //shows edit post form
-Route::put('edit/{slug}', [\App\Http\Controllers\BlogPostController::class, 'update'])->name('update'); //commits edited post to the database 
-Route::delete('/blog/{slug}', [\App\Http\Controllers\BlogPostController::class, 'destroy']); //deletes post from the database
+Route::group(['middleware' => ['auth']],function () {
+    Route::get('/blog/create/post', [\App\Http\Controllers\BlogPostController::class, 'create']); //shows create post form
+    Route::post('/blog/create/post', [\App\Http\Controllers\BlogPostController::class, 'store'])->name('store'); //saves the created post to the databse
+    Route::get('edit/{slug}', [\App\Http\Controllers\BlogPostController::class, 'edit'])->name('edit'); //shows edit post form
+    Route::put('edit/{slug}', [\App\Http\Controllers\BlogPostController::class, 'update'])->name('update'); //commits edited post to the database 
+    Route::delete('/blog/{slug}', [\App\Http\Controllers\BlogPostController::class, 'destroy']); //deletes post from the database
+});
 
 
